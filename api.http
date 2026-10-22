@@ -168,3 +168,186 @@ Content-Type: application/json
 
 //ele termina aqui pet-owner
 
+
+###
+GET http://localhost:8081/api/grooming-bays/all
+
+###
+GET http://localhost:8081/api/pet-types/all
+
+
+// groomers start here
+###
+POST http://localhost:8081/api/groomers/save
+Content-Type: application/json
+
+{
+  "firstName": "Alice",
+  "lastName": "Mukamana",
+  "phone": "0788111111",
+  "groomingBay": {"id": "789ba993-2797-4535-b0ff-b05353f212ed"},
+  "petTypes": [
+    {"id": "21796da7-f4d0-4002-b87c-9101ded7162a"},
+    {"id": "aeb50411-a3c3-47bc-ac7e-298503131c5a"}
+  ]
+}
+
+###
+
+POST http://localhost:8081/api/groomers/save
+Content-Type: application/json
+
+{
+  "firstName": "Eric",
+  "lastName": "Habimana",
+  "phone": "0788222222",
+  "groomingBay": {"id": "63f65d57-33c7-4512-ac9f-96c76c2d1304"},
+  "petTypes": [
+    {"id": "01d1a74b-bc17-4a5b-8c16-8176ea3754ff"}
+  ]
+}
+
+###
+
+POST http://localhost:8081/api/groomers/save
+Content-Type: application/json
+
+{
+  "firstName": "Grace",
+  "lastName": "Uwase",
+  "phone": "0788333333",
+  "groomingBay": {"id": "dab6337f-c541-4b05-9f49-445aae25e652"},
+  "petTypes": [
+    {"id": "21796da7-f4d0-4002-b87c-9101ded7162a"}
+  ]
+}
+
+###
+GET http://localhost:8081/api/groomers/all
+
+###
+GET http://localhost:8081/api/groomers/5c4e609d-f4d6-4ee8-ab45-3c71287204de
+###
+GET http://localhost:8081/api/groomers/123e4567-e89b-12d3-a456-426614174000
+
+
+###
+POST http://localhost:8081/api/groomers/save
+Content-Type: application/json
+
+{"firstName": "Temp", "lastName": "Groomer", "phone": "0000000000"}
+
+
+
+
+###
+PUT http://localhost:8081/api/groomers/update/5de8a259-c5d7-4629-b8fb-b065a82bb77d
+Content-Type: application/json
+
+{"firstName": "Temp", "lastName": "Updated", "phone": "1111111111"}
+
+
+###
+DELETE http://localhost:8081/api/groomers/delete/5de8a259-c5d7-4629-b8fb-b065a82bb77d
+
+//termina aqui os groomers
+
+
+//começa aqui os grooming sessions
+###
+POST http://localhost:8081/api/grooming-sessions/save
+Content-Type: application/json
+
+{"sessionDate": "2026-10-20", "status": "FINISHED", "service": "Full grooming", "petOwner": {"id": "652c2aa0-09fd-4016-8eff-3317e65a75f0"}, "groomer": {"id": "5c4e609d-f4d6-4ee8-ab45-3c71287204de"}}
+
+###
+
+POST http://localhost:8081/api/grooming-sessions/save
+Content-Type: application/json
+
+{"sessionDate": "2026-10-20", "status": "CANCELLED", "service": "Nail trimming", "petOwner": {"id": "1dca37f6-2ef5-4f43-8b76-7baca3a0006d"}, "groomer": {"id": "5c4e609d-f4d6-4ee8-ab45-3c71287204de"}}
+
+###
+
+POST http://localhost:8081/api/grooming-sessions/save
+Content-Type: application/json
+
+{"sessionDate": "2026-10-15", "status": "FINISHED", "service": "Bath and dry", "petOwner": {"id": "50c96b08-6c12-4c6c-b0ef-1cff47ccc127"}, "groomer": {"id": "3b2f02fb-2135-4d82-b4c3-568837569199"}}
+
+###
+
+POST http://localhost:8081/api/grooming-sessions/save
+Content-Type: application/json
+
+{"sessionDate": "2026-10-18", "status": "FINISHED", "service": "Haircut", "petOwner": {"id": "652c2aa0-09fd-4016-8eff-3317e65a75f0"}, "groomer": {"id": "aadd4397-a57b-4f64-89dd-2c5bc2b4374c"}}
+
+###
+
+POST http://localhost:8081/api/grooming-sessions/save
+Content-Type: application/json
+
+{"sessionDate": "2026-10-22", "status": "IN_PROGRESS", "service": "Bath", "petOwner": {"id": "1cb8cde6-3e88-4cee-bcad-6a6ac0fb2179"}, "groomer": {"id": "5c4e609d-f4d6-4ee8-ab45-3c71287204de"}}
+
+###
+
+POST http://localhost:8081/api/grooming-sessions/save
+Content-Type: application/json
+
+{"sessionDate": "2026-10-28", "status": "BOOKED", "service": "Full grooming", "petOwner": {"id": "652c2aa0-09fd-4016-8eff-3317e65a75f0"}, "groomer": {"id": "aadd4397-a57b-4f64-89dd-2c5bc2b4374c"}}
+
+###
+
+POST http://localhost:8081/api/grooming-sessions/save
+Content-Type: application/json
+
+{"sessionDate": "2026-11-03", "status": "BOOKED", "service": "Feather trimming", "petOwner": {"id": "ad9ef75e-9012-4494-8946-7790f83af1ce"}, "groomer": {"id": "3b2f02fb-2135-4d82-b4c3-568837569199"}}
+
+###
+
+POST http://localhost:8081/api/grooming-sessions/save
+Content-Type: application/json
+
+{"sessionDate": "2026-11-05", "status": "BOOKED", "service": "Bath and brush", "petOwner": {"id": "50c96b08-6c12-4c6c-b0ef-1cff47ccc127"}, "groomer": {"id": "5c4e609d-f4d6-4ee8-ab45-3c71287204de"}}
+
+###
+
+POST http://localhost:8081/api/grooming-sessions/save
+Content-Type: application/json
+
+{"sessionDate": "2026-11-10", "status": "BOOKED", "service": "Nail trimming", "petOwner": {"id": "1dca37f6-2ef5-4f43-8b76-7baca3a0006d"}, "groomer": {"id": "aadd4397-a57b-4f64-89dd-2c5bc2b4374c"}}
+
+###
+
+POST http://localhost:8081/api/grooming-sessions/save
+Content-Type: application/json
+
+{"sessionDate": "2026-11-15", "status": "CANCELLED", "service": "Bath", "petOwner": {"id": "1cb8cde6-3e88-4cee-bcad-6a6ac0fb2179"}, "groomer": {"id": "3b2f02fb-2135-4d82-b4c3-568837569199"}}
+
+
+###
+GET http://localhost:8081/api/grooming-sessions/all
+
+###
+DELETE /api/grooming-sessions/delete/ID
+
+###
+GET http://localhost:8081/api/grooming-sessions/0ce0e2f8-bbdd-479c-a264-f1d68e6e5d05
+
+###
+POST http://localhost:8081/api/grooming-sessions/save
+Content-Type: application/json
+
+{"sessionDate": "2026-12-30", "status": "BOOKED", "service": "Temp", "petOwner": {"id": "652c2aa0-09fd-4016-8eff-3317e65a75f0"}, "groomer": {"id": "3b2f02fb-2135-4d82-b4c3-568837569199"}}
+
+
+
+###
+PUT http://localhost:8081/api/grooming-sessions/update/f682961f-9c32-4b90-9a97-0aad0c71a265
+Content-Type: application/json
+
+{"sessionDate": "2026-12-31", "status": "BOOKED", "service": "Temp Updated", "petOwner": {"id": "652c2aa0-09fd-4016-8eff-3317e65a75f0"}, "groomer": {"id": "3b2f02fb-2135-4d82-b4c3-568837569199"}}
+
+
+
+###
+DELETE http://localhost:8081/api/grooming-sessions/delete/f682961f-9c32-4b90-9a97-0aad0c71a265
