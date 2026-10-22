@@ -99,3 +99,72 @@ PUT http://localhost:8081/api/grooming-bays/update/123e4567-e89b-12d3-a456-42661
 Content-Type: application/json
 
 {"bayNumber": 1, "name": "X"}
+
+//groomingbay termina aqui
+
+
+
+//pet owner start here
+
+###
+POST http://localhost:8081/api/pet-owners/save
+Content-Type: application/json
+
+{"firstName": "David", "lastName": "Ndjimbo", "ownerCode": "PO-0210", "petName": "Rex", "phone": "0788000001"}
+
+###
+
+POST http://localhost:8081/api/pet-owners/save
+Content-Type: application/json
+
+{"firstName": "Mario", "lastName": "Ndjimbo", "ownerCode": "PO-0211", "petName": "Luna", "phone": "0788000002"}
+
+###
+
+POST http://localhost:8081/api/pet-owners/save
+Content-Type: application/json
+
+{"firstName": "Eduardo", "lastName": "Chivala", "ownerCode": "PO-0212", "petName": "Milo", "phone": "0788000003"}
+
+###
+
+POST http://localhost:8081/api/pet-owners/save
+Content-Type: application/json
+
+{"firstName": "Jeorge", "lastName": "Zeferino", "ownerCode": "PO-0213", "petName": "Coco", "phone": "0788000004"}
+
+###
+
+POST http://localhost:8081/api/pet-owners/save
+Content-Type: application/json
+
+{"firstName": "Joao", "lastName": "Armindo", "ownerCode": "PO-0214", "petName": "Bella", "phone": "0788000005"}
+
+
+###
+GET http://localhost:8081/api/pet-owners/all
+
+###
+GET http://localhost:8081/api/pet-owners/652c2aa0-09fd-4016-8eff-3317e65a75f0
+
+###
+GET http://localhost:8081/api/pet-owners/652c2aa0-09fd-4016-8eff-3317e65a75f
+
+###
+POST http://localhost:8081/api/pet-owners/save
+Content-Type: application/json
+
+{"firstName": "Temp", "lastName": "Temp", "ownerCode": "PO-9999", "petName": "Tmp", "phone": "0000000000"}
+
+
+###
+DELETE http://localhost:8081/api/pet-owners/delete/08901ba7-c0be-44e3-8374-556b3031b23a
+
+###
+PUT http://localhost:8081/api/pet-owners/update/123e4567-e89b-12d3-a456-426614174000
+Content-Type: application/json
+
+{"firstName": "X", "lastName": "X", "ownerCode": "PO-0000", "petName": "X", "phone": "0"}
+
+//ele termina aqui pet-owner
+
