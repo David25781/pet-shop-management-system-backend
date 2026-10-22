@@ -1,0 +1,40 @@
+//test pet-types start here
+
+
+POST http://localhost:8081/api/pet-types/save
+Content-Type: application/json
+
+{"name": "Rabbits"}
+
+###
+
+GET http://localhost:8081/api/pet-types/all
+
+###
+
+GET http://localhost:8081/api/pet-types/aeb50411-a3c3-47bc-ac7e-298503131c5a
+
+###
+GET http://localhost:8081/api/pet-types/123e4567-e89b-12d3-a456-426614174000
+
+
+###
+
+POST http://localhost:8081/api/pet-types/save
+Content-Type: application/json
+
+{"name": "Temp"}
+
+
+###
+PUT http://localhost:8081/api/pet-types/update/2752ba07-500e-4aa0-a9ec-2e1ea284208a
+Content-Type: application/json
+
+{"name": "Temp Updated"}
+
+###
+DELETE http://localhost:8081/api/pet-types/delete/2752ba07-500e-4aa0-a9ec-2e1ea284208a
+
+//test pet-types terminate here
+
+
