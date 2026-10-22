@@ -38,3 +38,64 @@ DELETE http://localhost:8081/api/pet-types/delete/2752ba07-500e-4aa0-a9ec-2e1ea2
 //test pet-types terminate here
 
 
+
+###
+//teste de groomingbays start here
+
+POST http://localhost:8081/api/grooming-bays/save
+Content-Type: application/json
+
+{"bayNumber": 1, "name": "Bay One"}
+
+###
+
+POST http://localhost:8081/api/grooming-bays/save
+Content-Type: application/json
+
+{"bayNumber": 2, "name": "Bay Two"}
+
+###
+
+POST http://localhost:8081/api/grooming-bays/save
+Content-Type: application/json
+
+{"bayNumber": 3, "name": "Bay Three"}
+
+###
+
+POST http://localhost:8081/api/grooming-bays/save
+Content-Type: application/json
+
+{"bayNumber": 4, "name": "Bay Four"}
+
+###
+GET http://localhost:8081/api/grooming-bays/all
+
+###
+GET http://localhost:8081/api/grooming-bays/7a4531ac-a940-4616-988b-925bcc34c728
+
+
+###
+GET http://localhost:8081/api/grooming-bays/7a4531sac-a940-4616-988b-925bcc34c728
+
+###
+GET http://localhost:8081/api/grooming-bays/123e4567-e89b-12d3-a456-426614174000
+
+###
+POST http://localhost:8081/api/grooming-bays/save
+Content-Type: application/json
+
+{"bayNumber": 99, "name": "Temp Bay"}
+
+
+###
+GET http://localhost:8081/api/grooming-bays/all 
+
+###
+DELETE http://localhost:8081/api/grooming-bays/delete/229fd732-0b8a-48db-b8e2-14fc7de34734
+
+###
+PUT http://localhost:8081/api/grooming-bays/update/123e4567-e89b-12d3-a456-426614174000
+Content-Type: application/json
+
+{"bayNumber": 1, "name": "X"}
