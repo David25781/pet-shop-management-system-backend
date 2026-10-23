@@ -47,4 +47,8 @@ public class GroomingBayService {
         groomingBayRepository.deleteById(id);
         return "Grooming bay deleted successfully";
     }
+
+    public List<GroomingBay> findFree() {
+        return groomingBayRepository.findFreeGroomingBays();
+    }
 }

@@ -45,6 +45,17 @@ public class PetOwnerController {
         return new ResponseEntity<>(petOwnerService.findByLastName(lastName), HttpStatus.OK);
     }
 
+    // C4: lists each pet owner of a groomer once, or 404 when the groomer id is unknown
+    @GetMapping("/of-groomer/{groomerId}")
+    public ResponseEntity<?> findByGroomer(@PathVariable UUID groomerId) {
+        Optional<List<PetOwner>> petOwners = petOwnerService.findByGroomer(groomerId);
+        if (petOwners.isPresent()) {
+            return new ResponseEntity<>(petOwners.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("The groomer with that id does not exist", HttpStatus.NOT_FOUND);
+        }
+    }
+
     // Returns one pet owner, or 404 when the id is unknown
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable UUID id) {

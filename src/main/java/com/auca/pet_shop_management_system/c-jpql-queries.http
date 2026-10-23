@@ -1,0 +1,28 @@
+@host = http://localhost:8081
+
+### C1 - groomers who hold Dogs (expected 200: Alice and Grace)
+GET {{host}}/api/groomers/by-pet-type?name=dogs
+
+### C1 - upper case, Cats (expected 200: Alice only)
+GET {{host}}/api/groomers/by-pet-type?name=CATS
+
+### C1 - Rabbits (expected 200, empty list)
+GET {{host}}/api/groomers/by-pet-type?name=rabbits
+
+### C2 - free grooming bays (expected 200: bay 4 only)
+GET {{host}}/api/grooming-bays/free
+
+### C3 - pet types nobody holds (expected 200: Rabbits only)
+GET {{host}}/api/pet-types/unused
+
+### C4 - pet owners of Alice (expected 200: 4 owners, each once)
+GET {{host}}/api/pet-owners/of-groomer/5c4e609d-f4d6-4ee8-ab45-3c71287204de
+
+### C4 - pet owners of Grace (expected 200: 2 owners, David appears once although he has 2 sessions with her)
+GET {{host}}/api/pet-owners/of-groomer/aadd4397-a57b-4f64-89dd-2c5bc2b4374c
+
+### C4 - pet owners of Eric (expected 200: 3 owners)
+GET {{host}}/api/pet-owners/of-groomer/3b2f02fb-2135-4d82-b4c3-568837569199
+
+### C4 - unknown groomer (expected 404 The groomer with that id does not exist)
+GET {{host}}/api/pet-owners/of-groomer/123e4567-e89b-12d3-a456-426614174000

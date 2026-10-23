@@ -52,4 +52,8 @@ public class GroomerService {
         groomerRepository.deleteById(id);
         return "Groomer deleted successfully";
     }
+
+    public List<Groomer> findByPetTypeName(String name) {
+        return groomerRepository.findGroomersByPetTypeName(name);
+    }
 }

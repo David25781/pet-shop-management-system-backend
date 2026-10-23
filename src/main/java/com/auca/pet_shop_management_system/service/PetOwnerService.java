@@ -1,6 +1,7 @@
 package com.auca.pet_shop_management_system.service;
 
 import com.auca.pet_shop_management_system.domain.PetOwner;
+import com.auca.pet_shop_management_system.repository.GroomerRepository;
 import com.auca.pet_shop_management_system.repository.PetOwnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,9 @@ public class PetOwnerService {
 
     @Autowired
     private PetOwnerRepository petOwnerRepository;
+
+    @Autowired
+    private GroomerRepository groomerRepository;
 
     public String save(PetOwner petOwner) {
         petOwnerRepository.save(petOwner);
@@ -53,5 +57,12 @@ public class PetOwnerService {
 
     public List<PetOwner> findByLastName(String lastName) {
         return petOwnerRepository.findByLastNameIgnoreCaseOrderByFirstNameAsc(lastName);
+    }
+
+    public Optional<List<PetOwner>> findByGroomer(UUID groomerId) {
+        if (!groomerRepository.existsById(groomerId)) {
+            return Optional.empty();
+        }
+        return Optional.of(petOwnerRepository.findPetOwnersByGroomerId(groomerId));
     }
 }

@@ -46,4 +46,8 @@ public class PetTypeService {
         petTypeRepository.deleteById(id);
         return "Pet type deleted successfully";
     }
+
+    public List<PetType> findUnused() {
+        return petTypeRepository.findUnusedPetTypes();
+    }
 }

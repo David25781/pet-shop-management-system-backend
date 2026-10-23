@@ -38,6 +38,12 @@ public class PetTypeController {
         return new ResponseEntity<>(petTypeService.findAll(), HttpStatus.OK);
     }
 
+    // C3: lists the pet types that no groomer holds
+    @GetMapping("/unused")
+    public ResponseEntity<List<PetType>> findUnused() {
+        return new ResponseEntity<>(petTypeService.findUnused(), HttpStatus.OK);
+    }
+
     // Returns one pet type, or 404 when the id is unknown
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable UUID id) {

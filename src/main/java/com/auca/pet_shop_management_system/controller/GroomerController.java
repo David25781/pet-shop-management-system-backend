@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -36,6 +37,12 @@ public class GroomerController {
     @GetMapping("/all")
     public ResponseEntity<List<Groomer>> findAll() {
         return new ResponseEntity<>(groomerService.findAll(), HttpStatus.OK);
+    }
+
+    // C1: lists the groomers who hold the given pet type, ignoring letter case
+    @GetMapping("/by-pet-type")
+    public ResponseEntity<List<Groomer>> findByPetType(@RequestParam String name) {
+        return new ResponseEntity<>(groomerService.findByPetTypeName(name), HttpStatus.OK);
     }
 
     // Returns one groomer, or 404 when the id is unknown

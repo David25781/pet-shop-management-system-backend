@@ -38,6 +38,12 @@ public class GroomingBayController {
         return new ResponseEntity<>(groomingBayService.findAll(), HttpStatus.OK);
     }
 
+    // C2: lists the grooming bays that no groomer occupies, sorted by bay number
+    @GetMapping("/free")
+    public ResponseEntity<List<GroomingBay>> findFree() {
+        return new ResponseEntity<>(groomingBayService.findFree(), HttpStatus.OK);
+    }
+
     // Returns one grooming bay, or 404 when the id is unknown
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable UUID id) {
