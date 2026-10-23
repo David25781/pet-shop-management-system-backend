@@ -18,6 +18,17 @@ public class GroomingSessionService {
     private GroomingSessionRepository groomingSessionRepository;
 
     public String save(GroomingSession groomingSession) {
+        if (groomingSession.getSessionDate().isBefore(LocalDate.now())) {
+            return "Grooming session date cannot be in the past";
+        }
+        boolean alreadyBooked = groomingSessionRepository.existsByGroomerIdAndSessionDateAndStatusNot(
+                groomingSession.getGroomer().getId(),
+                groomingSession.getSessionDate(),
+                SessionStatus.CANCELLED);
+        if (alreadyBooked) {
+            return "Groomer is already booked on that date";
+        }
+        groomingSession.setStatus(SessionStatus.BOOKED);
         groomingSessionRepository.save(groomingSession);
         return "Grooming session saved successfully";
     }

@@ -28,11 +28,17 @@ public class GroomingSessionController {
     @Autowired
     private GroomingSessionService groomingSessionService;
 
-    // Saves a new grooming session and answers 201 Created
+    // D1: saves a grooming session; 400 for a past date, 409 when the groomer is already booked, 201 otherwise
     @PostMapping("/save")
     public ResponseEntity<String> save(@RequestBody GroomingSession groomingSession) {
         String message = groomingSessionService.save(groomingSession);
-        return new ResponseEntity<>(message, HttpStatus.CREATED);
+        if (message.equals("Grooming session date cannot be in the past")) {
+            return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+        } else if (message.equals("Groomer is already booked on that date")) {
+            return new ResponseEntity<>(message, HttpStatus.CONFLICT);
+        } else {
+            return new ResponseEntity<>(message, HttpStatus.CREATED);
+        }
     }
 
     // Returns every grooming session

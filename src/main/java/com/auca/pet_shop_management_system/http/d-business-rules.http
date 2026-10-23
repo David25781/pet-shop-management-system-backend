@@ -1,0 +1,34 @@
+@host = http://localhost:8081
+
+### D1 - past date (expected 400 Grooming session date cannot be in the past)
+POST {{host}}/api/grooming-sessions/save
+Content-Type: application/json
+
+{"sessionDate": "2026-10-01", "status": "BOOKED", "service": "Test", "petOwner": {"id": "652c2aa0-09fd-4016-8eff-3317e65a75f0"}, "groomer": {"id": "5c4e609d-f4d6-4ee8-ab45-3c71287204de"}}
+
+### D1 - Alice is already BOOKED on 2026-11-05 (expected 409 Groomer is already booked on that date)
+POST {{host}}/api/grooming-sessions/save
+Content-Type: application/json
+
+{"sessionDate": "2026-11-05", "status": "BOOKED", "service": "Test", "petOwner": {"id": "652c2aa0-09fd-4016-8eff-3317e65a75f0"}, "groomer": {"id": "5c4e609d-f4d6-4ee8-ab45-3c71287204de"}}
+
+### D1 - Eric only has a CANCELLED session on 2026-11-15, so it is allowed (expected 201)
+POST {{host}}/api/grooming-sessions/save
+Content-Type: application/json
+
+{"sessionDate": "2026-11-15", "status": "BOOKED", "service": "Test cancelled does not block", "petOwner": {"id": "652c2aa0-09fd-4016-8eff-3317e65a75f0"}, "groomer": {"id": "3b2f02fb-2135-4d82-b4c3-568837569199"}}
+
+### D1 - same request again, now Eric is BOOKED that day (expected 409)
+POST {{host}}/api/grooming-sessions/save
+Content-Type: application/json
+
+{"sessionDate": "2026-11-15", "status": "BOOKED", "service": "Test cancelled does not block", "petOwner": {"id": "652c2aa0-09fd-4016-8eff-3317e65a75f0"}, "groomer": {"id": "3b2f02fb-2135-4d82-b4c3-568837569199"}}
+
+### D1 - body says FINISHED but it must be saved as BOOKED (expected 201)
+POST {{host}}/api/grooming-sessions/save
+Content-Type: application/json
+
+{"sessionDate": "2026-12-01", "status": "FINISHED", "service": "Test status forced", "petOwner": {"id": "652c2aa0-09fd-4016-8eff-3317e65a75f0"}, "groomer": {"id": "aadd4397-a57b-4f64-89dd-2c5bc2b4374c"}}
+
+### D1 - check: the session of 2026-12-01 must show BOOKED
+GET {{host}}/api/grooming-sessions/between?start=2026-12-01&end=2026-12-01

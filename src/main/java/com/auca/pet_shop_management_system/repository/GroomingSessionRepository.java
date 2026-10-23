@@ -13,4 +13,6 @@ public interface GroomingSessionRepository extends JpaRepository<GroomingSession
     List<GroomingSession> findByStatusOrderBySessionDateAsc(SessionStatus status);
 
     List<GroomingSession> findBySessionDateBetweenOrderBySessionDateAsc(LocalDate start, LocalDate end);
+
+    boolean existsByGroomerIdAndSessionDateAndStatusNot(UUID groomerId, LocalDate sessionDate, SessionStatus status);
 }
