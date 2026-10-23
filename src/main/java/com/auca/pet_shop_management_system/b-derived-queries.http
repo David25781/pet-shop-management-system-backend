@@ -1,0 +1,31 @@
+@host = http://localhost:8081
+
+### B1 - pet owners by last name (expected 200, David then Mario)
+GET {{host}}/api/pet-owners/by-last-name?lastName=ndjimbo
+
+### B1 - upper case gives the same result (IgnoreCase)
+GET {{host}}/api/pet-owners/by-last-name?lastName=NDJIMBO
+
+### B1 - nobody matches (expected 200, empty list)
+GET {{host}}/api/pet-owners/by-last-name?lastName=zzz
+
+### B2 - BOOKED (expected 200, 4 sessions, earliest first)
+GET {{host}}/api/grooming-sessions/by-status?status=BOOKED
+
+### B2 - FINISHED (expected 200, 3 sessions)
+GET {{host}}/api/grooming-sessions/by-status?status=FINISHED
+
+### B2 - invalid status (expected 400)
+GET {{host}}/api/grooming-sessions/by-status?status=XYZ
+
+### B3 - October (expected 200, 6 sessions ordered by date)
+GET {{host}}/api/grooming-sessions/between?start=2026-10-01&end=2026-10-31
+
+### B3 - single day, both ends inclusive (expected 200, 2 sessions)
+GET {{host}}/api/grooming-sessions/between?start=2026-10-20&end=2026-10-20
+
+### B3 - November (expected 200, 4 sessions)
+GET {{host}}/api/grooming-sessions/between?start=2026-11-01&end=2026-11-30
+
+### B3 - no sessions (expected 200, empty list)
+GET {{host}}/api/grooming-sessions/between?start=2027-01-01&end=2027-01-31

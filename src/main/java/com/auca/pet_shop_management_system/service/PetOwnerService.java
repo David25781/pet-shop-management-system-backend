@@ -50,4 +50,8 @@ public class PetOwnerService {
         petOwnerRepository.deleteById(id);
         return "Pet owner deleted successfully";
     }
+
+    public List<PetOwner> findByLastName(String lastName) {
+        return petOwnerRepository.findByLastNameIgnoreCaseOrderByFirstNameAsc(lastName);
+    }
 }

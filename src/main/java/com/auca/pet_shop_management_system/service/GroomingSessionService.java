@@ -1,10 +1,12 @@
 package com.auca.pet_shop_management_system.service;
 
 import com.auca.pet_shop_management_system.domain.GroomingSession;
+import com.auca.pet_shop_management_system.domain.SessionStatus;
 import com.auca.pet_shop_management_system.repository.GroomingSessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -49,5 +51,13 @@ public class GroomingSessionService {
         }
         groomingSessionRepository.deleteById(id);
         return "Grooming session deleted successfully";
+    }
+
+    public List<GroomingSession> findByStatus(SessionStatus status) {
+        return groomingSessionRepository.findByStatusOrderBySessionDateAsc(status);
+    }
+
+    public List<GroomingSession> findBetween(LocalDate start, LocalDate end) {
+        return groomingSessionRepository.findBySessionDateBetweenOrderBySessionDateAsc(start, end);
     }
 }

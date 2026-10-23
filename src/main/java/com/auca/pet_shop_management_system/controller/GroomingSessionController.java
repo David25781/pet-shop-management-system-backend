@@ -1,6 +1,7 @@
 package com.auca.pet_shop_management_system.controller;
 
 import com.auca.pet_shop_management_system.domain.GroomingSession;
+import com.auca.pet_shop_management_system.domain.SessionStatus;
 import com.auca.pet_shop_management_system.service.GroomingSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,8 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -36,6 +39,20 @@ public class GroomingSessionController {
     @GetMapping("/all")
     public ResponseEntity<List<GroomingSession>> findAll() {
         return new ResponseEntity<>(groomingSessionService.findAll(), HttpStatus.OK);
+    }
+
+    // B2: lists grooming sessions in one status, earliest date first
+    @GetMapping("/by-status")
+    public ResponseEntity<List<GroomingSession>> findByStatus(@RequestParam SessionStatus status) {
+        return new ResponseEntity<>(groomingSessionService.findByStatus(status), HttpStatus.OK);
+    }
+
+    // B3: lists grooming sessions between two dates, both inclusive; the Strings are parsed here
+    @GetMapping("/between")
+    public ResponseEntity<List<GroomingSession>> findBetween(@RequestParam String start, @RequestParam String end) {
+        LocalDate startDate = LocalDate.parse(start);
+        LocalDate endDate = LocalDate.parse(end);
+        return new ResponseEntity<>(groomingSessionService.findBetween(startDate, endDate), HttpStatus.OK);
     }
 
     // Returns one grooming session, or 404 when the id is unknown
