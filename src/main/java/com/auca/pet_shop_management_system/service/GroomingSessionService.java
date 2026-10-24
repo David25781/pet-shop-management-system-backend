@@ -3,6 +3,7 @@ package com.auca.pet_shop_management_system.service;
 import com.auca.pet_shop_management_system.domain.GroomingSession;
 import com.auca.pet_shop_management_system.domain.SessionStatus;
 import com.auca.pet_shop_management_system.repository.GroomingSessionRepository;
+import com.auca.pet_shop_management_system.repository.ProductSaleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,9 @@ public class GroomingSessionService {
 
     @Autowired
     private GroomingSessionRepository groomingSessionRepository;
+
+    @Autowired
+    private ProductSaleRepository productSaleRepository;
 
     public String save(GroomingSession groomingSession) {
         if (groomingSession.getSessionDate().isBefore(LocalDate.now())) {
@@ -56,8 +60,12 @@ public class GroomingSessionService {
     }
 
     public String delete(UUID id) {
-        if (!groomingSessionRepository.existsById(id)) {
+        Optional<GroomingSession> existing = groomingSessionRepository.findById(id);
+        if (existing.isEmpty()) {
             return "The grooming session with that id does not exist";
+        }
+        if (productSaleRepository.existsByGroomingSession(existing.get())) {
+            return "That grooming session has product sales, delete them first";
         }
         groomingSessionRepository.deleteById(id);
         return "Grooming session deleted successfully";

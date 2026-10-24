@@ -97,12 +97,14 @@ public class GroomingSessionController {
         }
     }
 
-    // Deletes a grooming session, or 404 when the id is unknown
+    // E3: deletes a grooming session; 404 unknown id, 409 when it still has product sales
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable UUID id) {
         String message = groomingSessionService.delete(id);
         if (message.equals("Grooming session deleted successfully")) {
             return new ResponseEntity<>(message, HttpStatus.OK);
+        } else if (message.equals("That grooming session has product sales, delete them first")) {
+            return new ResponseEntity<>(message, HttpStatus.CONFLICT);
         } else {
             return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
         }

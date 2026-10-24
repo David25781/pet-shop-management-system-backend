@@ -1,0 +1,85 @@
+@host = http://localhost:8081
+
+### E1 1 - sale for David's FINISHED session (expected 201 Product sale saved successfully)
+POST {{host}}/api/product-sales/save?groomingSessionId=0ce0e2f8-bbdd-479c-a264-f1d68e6e5d05
+Content-Type: application/json
+
+{"productName": "Flea shampoo", "instructions": "Use once a week", "quantity": 1}
+
+### E1 2 - second sale, same session (expected 201)
+POST {{host}}/api/product-sales/save?groomingSessionId=0ce0e2f8-bbdd-479c-a264-f1d68e6e5d05
+Content-Type: application/json
+
+{"productName": "Ear cleaner", "instructions": "Use twice a week", "quantity": 2}
+
+### E1 3 - sale for David's other FINISHED session (expected 201)
+POST {{host}}/api/product-sales/save?groomingSessionId=bfb1a9ea-b0c1-4df8-8d3f-37b02d373f56
+Content-Type: application/json
+
+{"productName": "Brush", "instructions": "Brush daily", "quantity": 1}
+
+### E1 4 - sale for Mario's FINISHED session (expected 201)
+POST {{host}}/api/product-sales/save?groomingSessionId=b1b0d9cf-21dc-4648-8900-1f17e2671fb8
+Content-Type: application/json
+
+{"productName": "Bird vitamins", "instructions": "Add to water daily", "quantity": 3}
+
+### E1 5 - BOOKED session (expected 400 Product sales are only for FINISHED grooming sessions)
+POST {{host}}/api/product-sales/save?groomingSessionId=a8811739-1016-4f44-8ae2-9e481f597bb0
+Content-Type: application/json
+
+{"productName": "Flea shampoo", "instructions": "Use once a week", "quantity": 1}
+
+### E1 6 - IN_PROGRESS session (expected 400)
+POST {{host}}/api/product-sales/save?groomingSessionId=05f85498-487d-4100-8390-3f50a1c49d22
+Content-Type: application/json
+
+{"productName": "Flea shampoo", "instructions": "Use once a week", "quantity": 1}
+
+### E1 7 - CANCELLED session (expected 400)
+POST {{host}}/api/product-sales/save?groomingSessionId=e6c581b4-98c8-4ca6-b2c2-e0ec21edac1b
+Content-Type: application/json
+
+{"productName": "Flea shampoo", "instructions": "Use once a week", "quantity": 1}
+
+### E1 8 - unknown session (expected 404 The grooming session with that id does not exist)
+POST {{host}}/api/product-sales/save?groomingSessionId=123e4567-e89b-12d3-a456-426614174000
+Content-Type: application/json
+
+{"productName": "Flea shampoo", "instructions": "Use once a week", "quantity": 1}
+
+### check - all product sales (expected 200, 4 sales, each with soldDate = today)
+GET {{host}}/api/product-sales/all
+
+### E2 1 - David PO-0210 (expected 200, 3 sales across his 2 sessions)
+GET {{host}}/api/product-sales/pet-owner/PO-0210
+
+### E2 2 - Mario PO-0211 (expected 200, 1 sale)
+GET {{host}}/api/product-sales/pet-owner/PO-0211
+
+### E2 3 - Joao PO-0214 has no FINISHED session (expected 200, empty list)
+GET {{host}}/api/product-sales/pet-owner/PO-0214
+
+### E3 1 - session with product sales cannot be deleted (expected 409 That grooming session has product sales, delete them first)
+DELETE {{host}}/api/grooming-sessions/delete/0ce0e2f8-bbdd-479c-a264-f1d68e6e5d05
+
+### E3 2 - unknown product sale (expected 404 The product sale with that id does not exist)
+DELETE {{host}}/api/product-sales/delete/123e4567-e89b-12d3-a456-426614174000
+
+### E3 3 - unknown grooming session (expected 404 The grooming session with that id does not exist)
+DELETE {{host}}/api/grooming-sessions/delete/123e4567-e89b-12d3-a456-426614174000
+
+
+### E3 4 - temporary sale (expected 201)
+POST {{host}}/api/product-sales/save?groomingSessionId=b1b0d9cf-21dc-4648-8900-1f17e2671fb8
+Content-Type: application/json
+
+{"productName": "Temp product", "instructions": "Temp", "quantity": 1}
+
+
+###
+GET {{host}}/api/product-sales/all
+
+###
+### E3 5 - delete the temporary sale (expected 200 Product sale deleted successfully)
+DELETE http://localhost:8081/api/product-sales/delete/7d1c4c82-e50e-4cb7-a617-321eaac6edf4
