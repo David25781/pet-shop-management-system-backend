@@ -1,6 +1,7 @@
 package com.auca.pet_shop_management_system.repository;
 
 import com.auca.pet_shop_management_system.domain.Groomer;
+import com.auca.pet_shop_management_system.domain.GroomingBay;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,4 +13,6 @@ public interface GroomerRepository extends JpaRepository<Groomer, UUID> {
 
     @Query("SELECT DISTINCT g FROM Groomer g JOIN g.petTypes p WHERE LOWER(p.name) = LOWER(:name)")
     List<Groomer> findGroomersByPetTypeName(@Param("name") String name);
+
+    boolean existsByGroomingBay(GroomingBay groomingBay);
 }

@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -62,6 +63,32 @@ public class GroomerController {
         String message = groomerService.update(id, groomer);
         if (message.equals("Groomer updated successfully")) {
             return new ResponseEntity<>(message, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    // D3: adds one pet type to a groomer keeping the existing ones; 404 unknown ids, 409 already held
+    @PutMapping("/{groomerId}/pet-types/{petTypeId}")
+    public ResponseEntity<String> addPetType(@PathVariable UUID groomerId, @PathVariable UUID petTypeId) {
+        String message = groomerService.addPetType(groomerId, petTypeId);
+        if (message.equals("Pet type added to the groomer")) {
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        } else if (message.equals("The groomer already has that pet type")) {
+            return new ResponseEntity<>(message, HttpStatus.CONFLICT);
+        } else {
+            return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    // D4: moves a groomer to another grooming bay; 404 unknown groomer or bay number, 409 bay taken
+    @PatchMapping("/{groomerId}/grooming-bay")
+    public ResponseEntity<String> changeGroomingBay(@PathVariable UUID groomerId, @RequestParam int bayNumber) {
+        String message = groomerService.changeGroomingBay(groomerId, bayNumber);
+        if (message.equals("Grooming bay changed successfully")) {
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        } else if (message.equals("That grooming bay is taken by another groomer")) {
+            return new ResponseEntity<>(message, HttpStatus.CONFLICT);
         } else {
             return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
         }

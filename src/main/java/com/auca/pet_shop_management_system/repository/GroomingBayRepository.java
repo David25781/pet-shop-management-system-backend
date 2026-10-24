@@ -5,10 +5,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface GroomingBayRepository extends JpaRepository<GroomingBay, UUID> {
 
     @Query("SELECT b FROM GroomingBay b WHERE NOT EXISTS (SELECT g FROM Groomer g WHERE g.groomingBay = b) ORDER BY b.bayNumber")
     List<GroomingBay> findFreeGroomingBays();
+
+    Optional<GroomingBay> findByBayNumber(int bayNumber);
 }

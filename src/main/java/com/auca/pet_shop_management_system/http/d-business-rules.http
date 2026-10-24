@@ -79,3 +79,47 @@ GET {{host}}/api/grooming-sessions/99ff6ed3-8798-4983-8969-742025362e03
 
 ### D2 10 - cleanup: delete the temporary session (expected 200 Grooming session deleted successfully)
 DELETE {{host}}/api/grooming-sessions/delete/99ff6ed3-8798-4983-8969-742025362e03
+
+
+
+### D3 1 - add Cats to Eric, who only held Birds (expected 200 Pet type added to the groomer)
+PUT {{host}}/api/groomers/3b2f02fb-2135-4d82-b4c3-568837569199/pet-types/aeb50411-a3c3-47bc-ac7e-298503131c5a
+
+### D3 2 - check: Eric now holds Birds AND Cats, the old one was kept (expected 200)
+GET {{host}}/api/groomers/3b2f02fb-2135-4d82-b4c3-568837569199
+
+### D3 3 - same request again (expected 409 The groomer already has that pet type)
+PUT {{host}}/api/groomers/3b2f02fb-2135-4d82-b4c3-568837569199/pet-types/aeb50411-a3c3-47bc-ac7e-298503131c5a
+
+### D3 4 - unknown groomer (expected 404 The groomer with that id does not exist)
+PUT {{host}}/api/groomers/123e4567-e89b-12d3-a456-426614174000/pet-types/aeb50411-a3c3-47bc-ac7e-298503131c5a
+
+### D3 5 - unknown pet type (expected 404 That pet type does not exist)
+PUT {{host}}/api/groomers/3b2f02fb-2135-4d82-b4c3-568837569199/pet-types/123e4567-e89b-12d3-a456-426614174000
+
+### D3 6 - cleanup: put Eric back to Birds only (expected 200 Groomer updated successfully)
+PUT {{host}}/api/groomers/update/3b2f02fb-2135-4d82-b4c3-568837569199
+Content-Type: application/json
+
+{"firstName": "Eric", "lastName": "Habimana", "phone": "0788222222", "groomingBay": {"id": "63f65d57-33c7-4512-ac9f-96c76c2d1304"}, "petTypes": [{"id": "01d1a74b-bc17-4a5b-8c16-8176ea3754ff"}]}
+
+### D4 1 - move Eric from bay 2 to the free bay 4 (expected 200 Grooming bay changed successfully)
+PATCH {{host}}/api/groomers/3b2f02fb-2135-4d82-b4c3-568837569199/grooming-bay?bayNumber=4
+
+### D4 2 - check with C2: the old bay 2 is now free and bay 4 is not (expected 200, Bay Two only)
+GET {{host}}/api/grooming-bays/free
+
+### D4 3 - bay 3 belongs to Grace (expected 409 That grooming bay is taken by another groomer)
+PATCH {{host}}/api/groomers/3b2f02fb-2135-4d82-b4c3-568837569199/grooming-bay?bayNumber=3
+
+### D4 4 - bay number that does not exist (expected 404 The grooming bay with that bayNumber does not exist)
+PATCH {{host}}/api/groomers/3b2f02fb-2135-4d82-b4c3-568837569199/grooming-bay?bayNumber=99
+
+### D4 5 - unknown groomer (expected 404 The groomer with that id does not exist)
+PATCH {{host}}/api/groomers/123e4567-e89b-12d3-a456-426614174000/grooming-bay?bayNumber=4
+
+### D4 6 - cleanup: move Eric back to bay 2 (expected 200 Grooming bay changed successfully)
+PATCH {{host}}/api/groomers/3b2f02fb-2135-4d82-b4c3-568837569199/grooming-bay?bayNumber=2
+
+### D4 7 - check: bay 4 is free again (expected 200, Bay Four only)
+GET {{host}}/api/grooming-bays/free
