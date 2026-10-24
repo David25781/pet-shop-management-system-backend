@@ -62,6 +62,12 @@ public class GroomingSessionController {
         return new ResponseEntity<>(groomingSessionService.findBetween(startDate, endDate), HttpStatus.OK);
     }
 
+    // F1: one row per status with its count, statuses without grooming sessions do not appear
+    @GetMapping("/stats/by-status")
+    public ResponseEntity<List<Object[]>> countByStatus() {
+        return new ResponseEntity<>(groomingSessionService.countByStatus(), HttpStatus.OK);
+    }
+
     // Returns one grooming session, or 404 when the id is unknown
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable UUID id) {
@@ -95,6 +101,14 @@ public class GroomingSessionController {
         } else {
             return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
         }
+    }
+
+    // F2: cancels in one UPDATE every grooming session of a groomer on a date, except the FINISHED ones
+    @PatchMapping("/cancel-day")
+    public ResponseEntity<String> cancelDay(@RequestParam UUID groomerId, @RequestParam String date) {
+        LocalDate day = LocalDate.parse(date);
+        String message = groomingSessionService.cancelDay(groomerId, day);
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
     // E3: deletes a grooming session; 404 unknown id, 409 when it still has product sales

@@ -6,6 +6,7 @@ import com.auca.pet_shop_management_system.repository.GroomingSessionRepository;
 import com.auca.pet_shop_management_system.repository.ProductSaleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -98,5 +99,19 @@ public class GroomingSessionService {
         groomingSession.setStatus(newStatus);
         groomingSessionRepository.save(groomingSession);
         return "Grooming session status updated successfully";
+    }
+
+    public List<Object[]> countByStatus() {
+        return groomingSessionRepository.countGroomingSessionsByStatus();
+    }
+
+    @Transactional
+    public String cancelDay(UUID groomerId, LocalDate date) {
+        int cancelled = groomingSessionRepository.cancelDayOfGroomer(
+                groomerId,
+                date,
+                SessionStatus.CANCELLED,
+                SessionStatus.FINISHED);
+        return cancelled + " grooming sessions cancelled";
     }
 }

@@ -1,0 +1,31 @@
+@host = http://localhost:8081
+
+### F1 - sessions per status (expected 200, one row per status; with the seed: BOOKED 4, CANCELLED 2, FINISHED 3, IN_PROGRESS 1, the row order may vary)
+GET {{host}}/api/grooming-sessions/stats/by-status
+
+### F2 1 - Alice on 2026-10-20 has one FINISHED and one CANCELLED (expected 200 "1 grooming sessions cancelled", the FINISHED one is untouched)
+PATCH {{host}}/api/grooming-sessions/cancel-day?groomerId=5c4e609d-f4d6-4ee8-ab45-3c71287204de&date=2026-10-20
+
+### F2 2 - check: the FINISHED session of Alice is still FINISHED (expected 200)
+GET {{host}}/api/grooming-sessions/between?start=2026-10-20&end=2026-10-20
+
+### F2 3 - Grace has no session on 2026-10-20 (expected 200 "0 grooming sessions cancelled")
+PATCH {{host}}/api/grooming-sessions/cancel-day?groomerId=aadd4397-a57b-4f64-89dd-2c5bc2b4374c&date=2026-10-20
+
+### F2 4 - setup: temporary BOOKED session for Eric (expected 201)
+POST {{host}}/api/grooming-sessions/save
+Content-Type: application/json
+
+{"sessionDate": "2027-02-01", "status": "BOOKED", "service": "Temp F2", "petOwner": {"id": "652c2aa0-09fd-4016-8eff-3317e65a75f0"}, "groomer": {"id": "3b2f02fb-2135-4d82-b4c3-568837569199"}}
+
+### F2 5 - cancel Eric's day (expected 200 "1 grooming sessions cancelled")
+PATCH {{host}}/api/grooming-sessions/cancel-day?groomerId=3b2f02fb-2135-4d82-b4c3-568837569199&date=2027-02-01
+
+### F2 6 - check: the temporary session is now CANCELLED, copy its id (the one next to "service") for the cleanup
+GET {{host}}/api/grooming-sessions/between?start=2027-02-01&end=2027-02-01
+
+### F2 7 - cleanup: replace COLE-O-ID-DA-SESSAO-TEMP by the id copied above (expected 200 Grooming session deleted successfully)
+DELETE {{host}}/api/grooming-sessions/delete/COLE-O-ID-DA-SESSAO-TEMP
+
+### F1 again - back to the seed numbers after the cleanup (BOOKED 4, CANCELLED 2, FINISHED 3, IN_PROGRESS 1)
+GET {{host}}/api/grooming-sessions/stats/by-status
