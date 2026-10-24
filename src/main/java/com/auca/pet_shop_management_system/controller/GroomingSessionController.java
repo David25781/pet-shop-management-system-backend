@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -72,12 +73,25 @@ public class GroomingSessionController {
         }
     }
 
-    // Updates a grooming session, or 404 when the id is unknown
+    // Updates the general data of a grooming session (never the status), or 404 when the id is unknown
     @PutMapping("/update/{id}")
     public ResponseEntity<String> update(@PathVariable UUID id, @RequestBody GroomingSession groomingSession) {
         String message = groomingSessionService.update(id, groomingSession);
         if (message.equals("Grooming session updated successfully")) {
             return new ResponseEntity<>(message, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    // D2: moves the status along the allowed arrows; 404 unknown id, 400 forbidden move, 200 otherwise
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<String> updateStatus(@PathVariable UUID id, @RequestParam SessionStatus status) {
+        String message = groomingSessionService.updateStatus(id, status);
+        if (message.equals("Grooming session status updated successfully")) {
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        } else if (message.startsWith("Cannot change status from")) {
+            return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
         } else {
             return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
         }

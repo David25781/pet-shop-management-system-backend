@@ -32,3 +32,50 @@ Content-Type: application/json
 
 ### D1 - check: the session of 2026-12-01 must show BOOKED
 GET {{host}}/api/grooming-sessions/between?start=2026-12-01&end=2026-12-01
+
+
+
+### D2 setup - create a temporary session (expected 201)
+POST {{host}}/api/grooming-sessions/save
+Content-Type: application/json
+
+{"sessionDate": "2027-01-10", "status": "BOOKED", "service": "Temp D2", "petOwner": {"id": "652c2aa0-09fd-4016-8eff-3317e65a75f0"}, "groomer": {"id": "aadd4397-a57b-4f64-89dd-2c5bc2b4374c"}}
+
+### D2 setup - find its id
+GET {{host}}/api/grooming-sessions/between?start=2027-01-10&end=2027-01-10
+
+
+@host = http://localhost:8081
+
+### D2 1 - BOOKED to FINISHED is forbidden (expected 400 Cannot change status from BOOKED to FINISHED)
+PATCH {{host}}/api/grooming-sessions/99ff6ed3-8798-4983-8969-742025362e03/status?status=FINISHED
+
+### D2 2 - BOOKED to IN_PROGRESS (expected 200 Grooming session status updated successfully)
+PATCH {{host}}/api/grooming-sessions/99ff6ed3-8798-4983-8969-742025362e03/status?status=IN_PROGRESS
+
+### D2 3 - IN_PROGRESS to BOOKED is forbidden (expected 400 Cannot change status from IN_PROGRESS to BOOKED)
+PATCH {{host}}/api/grooming-sessions/99ff6ed3-8798-4983-8969-742025362e03/status?status=BOOKED
+
+### D2 4 - IN_PROGRESS to FINISHED (expected 200 Grooming session status updated successfully)
+PATCH {{host}}/api/grooming-sessions/99ff6ed3-8798-4983-8969-742025362e03/status?status=FINISHED
+
+### D2 5 - FINISHED is final (expected 400 Cannot change status from FINISHED to CANCELLED)
+PATCH {{host}}/api/grooming-sessions/99ff6ed3-8798-4983-8969-742025362e03/status?status=CANCELLED
+
+### D2 6 - unknown id (expected 404 The grooming session with that id does not exist)
+PATCH {{host}}/api/grooming-sessions/123e4567-e89b-12d3-a456-426614174000/status?status=IN_PROGRESS
+
+### D2 7 - invalid status value (expected 400)
+PATCH {{host}}/api/grooming-sessions/99ff6ed3-8798-4983-8969-742025362e03/status?status=XYZ
+
+### D2 8 - PUT must NOT change the status: body says BOOKED but it stays FINISHED (expected 200 Grooming session updated successfully)
+PUT {{host}}/api/grooming-sessions/update/99ff6ed3-8798-4983-8969-742025362e03
+Content-Type: application/json
+
+{"sessionDate": "2027-01-10", "status": "BOOKED", "service": "Temp D2 edited", "petOwner": {"id": "652c2aa0-09fd-4016-8eff-3317e65a75f0"}, "groomer": {"id": "aadd4397-a57b-4f64-89dd-2c5bc2b4374c"}}
+
+### D2 9 - check: service is "Temp D2 edited" and status is still FINISHED (expected 200)
+GET {{host}}/api/grooming-sessions/99ff6ed3-8798-4983-8969-742025362e03
+
+### D2 10 - cleanup: delete the temporary session (expected 200 Grooming session deleted successfully)
+DELETE {{host}}/api/grooming-sessions/delete/99ff6ed3-8798-4983-8969-742025362e03

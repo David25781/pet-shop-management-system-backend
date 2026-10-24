@@ -48,7 +48,6 @@ public class GroomingSessionService {
         }
         GroomingSession current = existing.get();
         current.setSessionDate(groomingSession.getSessionDate());
-        current.setStatus(groomingSession.getStatus());
         current.setService(groomingSession.getService());
         current.setPetOwner(groomingSession.getPetOwner());
         current.setGroomer(groomingSession.getGroomer());
@@ -70,5 +69,26 @@ public class GroomingSessionService {
 
     public List<GroomingSession> findBetween(LocalDate start, LocalDate end) {
         return groomingSessionRepository.findBySessionDateBetweenOrderBySessionDateAsc(start, end);
+    }
+
+    public String updateStatus(UUID id, SessionStatus newStatus) {
+        Optional<GroomingSession> existing = groomingSessionRepository.findById(id);
+        if (existing.isEmpty()) {
+            return "The grooming session with that id does not exist";
+        }
+        GroomingSession groomingSession = existing.get();
+        SessionStatus currentStatus = groomingSession.getStatus();
+        boolean allowed = false;
+        if (currentStatus == SessionStatus.BOOKED) {
+            allowed = newStatus == SessionStatus.IN_PROGRESS || newStatus == SessionStatus.CANCELLED;
+        } else if (currentStatus == SessionStatus.IN_PROGRESS) {
+            allowed = newStatus == SessionStatus.FINISHED || newStatus == SessionStatus.CANCELLED;
+        }
+        if (!allowed) {
+            return "Cannot change status from " + currentStatus + " to " + newStatus;
+        }
+        groomingSession.setStatus(newStatus);
+        groomingSessionRepository.save(groomingSession);
+        return "Grooming session status updated successfully";
     }
 }
