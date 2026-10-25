@@ -5,6 +5,8 @@ import com.auca.pet_shop_management_system.domain.SessionStatus;
 import com.auca.pet_shop_management_system.repository.GroomingSessionRepository;
 import com.auca.pet_shop_management_system.repository.ProductSaleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -113,5 +115,9 @@ public class GroomingSessionService {
                 SessionStatus.CANCELLED,
                 SessionStatus.FINISHED);
         return cancelled + " grooming sessions cancelled";
+    }
+
+    public Page<GroomingSession> findPage(Pageable pageable) {
+        return groomingSessionRepository.findAll(pageable);
     }
 }

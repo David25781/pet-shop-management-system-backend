@@ -19,6 +19,10 @@ public interface GroomingSessionRepository extends JpaRepository<GroomingSession
 
     boolean existsByGroomerIdAndSessionDateAndStatusNot(UUID groomerId, LocalDate sessionDate, SessionStatus status);
 
+    long countBySessionDate(LocalDate sessionDate);
+
+    long countByStatus(SessionStatus status);
+
     @Query("SELECT s.status, COUNT(s) FROM GroomingSession s GROUP BY s.status")
     List<Object[]> countGroomingSessionsByStatus();
 

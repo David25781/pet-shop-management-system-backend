@@ -1,0 +1,13 @@
+@host = http://localhost:8081
+
+### Bonus 1 - dashboard (expected 200: petOwners 5, groomers 3, freeBays 1, sessionsToday 0, booked 4, productSales 4)
+GET {{host}}/api/dashboard/summary
+
+### Bonus 2 - page 0, 5 per page, newest first (expected 200: 5 sessions from 2026-11-15 down to 2026-10-28, totalElements 10, totalPages 2)
+GET {{host}}/api/grooming-sessions/page?page=0&size=5&sort=sessionDate,desc
+
+### Bonus 2 - page 1 (expected 200: the other 5 sessions, from 2026-10-22 down to 2026-10-15)
+GET {{host}}/api/grooming-sessions/page?page=1&size=5&sort=sessionDate,desc
+
+### Bonus 2 - smaller pages, oldest first (expected 200: 3 sessions 2026-10-15, 2026-10-18, 2026-10-20; totalPages 4)
+GET {{host}}/api/grooming-sessions/page?page=0&size=3&sort=sessionDate,asc

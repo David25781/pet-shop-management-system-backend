@@ -4,6 +4,10 @@ import com.auca.pet_shop_management_system.domain.GroomingSession;
 import com.auca.pet_shop_management_system.domain.SessionStatus;
 import com.auca.pet_shop_management_system.service.GroomingSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -66,6 +70,21 @@ public class GroomingSessionController {
     @GetMapping("/stats/by-status")
     public ResponseEntity<List<Object[]>> countByStatus() {
         return new ResponseEntity<>(groomingSessionService.countByStatus(), HttpStatus.OK);
+    }
+
+    // Bonus: grooming sessions page by page; the Pageable is built here from page, size and sort
+    @GetMapping("/page")
+    public ResponseEntity<Page<GroomingSession>> findPage(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "sessionDate,asc") String sort) {
+        String[] sortParts = sort.split(",");
+        Sort.Direction direction = Sort.Direction.ASC;
+        if (sortParts.length > 1 && sortParts[1].equalsIgnoreCase("desc")) {
+            direction = Sort.Direction.DESC;
+        }
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortParts[0]));
+        return new ResponseEntity<>(groomingSessionService.findPage(pageable), HttpStatus.OK);
     }
 
     // Returns one grooming session, or 404 when the id is unknown
