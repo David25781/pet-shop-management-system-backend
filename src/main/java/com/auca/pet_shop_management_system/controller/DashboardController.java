@@ -17,7 +17,7 @@ public class DashboardController {
     @Autowired
     private DashboardService dashboardService;
 
-    // Bonus: one JSON object with the main counters of the pet shop
+    
     @GetMapping("/summary")
     public ResponseEntity<Map<String, Long>> summary() {
         return new ResponseEntity<>(dashboardService.summary(), HttpStatus.OK);

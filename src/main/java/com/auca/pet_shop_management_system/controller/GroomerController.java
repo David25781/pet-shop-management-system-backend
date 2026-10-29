@@ -27,26 +27,26 @@ public class GroomerController {
     @Autowired
     private GroomerService groomerService;
 
-    // Saves a new groomer and answers 201 Created
+    
     @PostMapping("/save")
     public ResponseEntity<String> save(@RequestBody Groomer groomer) {
         String message = groomerService.save(groomer);
         return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
 
-    // Returns every groomer
+    
     @GetMapping("/all")
     public ResponseEntity<List<Groomer>> findAll() {
         return new ResponseEntity<>(groomerService.findAll(), HttpStatus.OK);
     }
 
-    // C1: lists the groomers who hold the given pet type, ignoring letter case
+    
     @GetMapping("/by-pet-type")
     public ResponseEntity<List<Groomer>> findByPetType(@RequestParam String name) {
         return new ResponseEntity<>(groomerService.findByPetTypeName(name), HttpStatus.OK);
     }
 
-    // Returns one groomer, or 404 when the id is unknown
+    
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable UUID id) {
         Optional<Groomer> groomer = groomerService.findById(id);
@@ -68,7 +68,7 @@ public class GroomerController {
         }
     }
 
-    // D3: adds one pet type to a groomer keeping the existing ones; 404 unknown ids, 409 already held
+    
     @PutMapping("/{groomerId}/pet-types/{petTypeId}")
     public ResponseEntity<String> addPetType(@PathVariable UUID groomerId, @PathVariable UUID petTypeId) {
         String message = groomerService.addPetType(groomerId, petTypeId);
@@ -81,7 +81,7 @@ public class GroomerController {
         }
     }
 
-    // D4: moves a groomer to another grooming bay; 404 unknown groomer or bay number, 409 bay taken
+    
     @PatchMapping("/{groomerId}/grooming-bay")
     public ResponseEntity<String> changeGroomingBay(@PathVariable UUID groomerId, @RequestParam int bayNumber) {
         String message = groomerService.changeGroomingBay(groomerId, bayNumber);
@@ -94,7 +94,7 @@ public class GroomerController {
         }
     }
 
-    // Deletes a groomer, or 404 when the id is unknown
+    
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable UUID id) {
         String message = groomerService.delete(id);

@@ -25,26 +25,24 @@ public class PetTypeController {
     @Autowired
     private PetTypeService petTypeService;
 
-    // Saves a new pet type and answers 201 Created
+    
     @PostMapping("/save")
     public ResponseEntity<String> save(@RequestBody PetType petType) {
         String message = petTypeService.save(petType);
         return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
 
-    // Returns every pet type
+    
     @GetMapping("/all")
     public ResponseEntity<List<PetType>> findAll() {
         return new ResponseEntity<>(petTypeService.findAll(), HttpStatus.OK);
     }
 
-    // C3: lists the pet types that no groomer holds
     @GetMapping("/unused")
     public ResponseEntity<List<PetType>> findUnused() {
         return new ResponseEntity<>(petTypeService.findUnused(), HttpStatus.OK);
     }
 
-    // Returns one pet type, or 404 when the id is unknown
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable UUID id) {
         Optional<PetType> petType = petTypeService.findById(id);
@@ -55,7 +53,6 @@ public class PetTypeController {
         }
     }
 
-    // Updates a pet type, or 404 when the id is unknown
     @PutMapping("/update/{id}")
     public ResponseEntity<String> update(@PathVariable UUID id, @RequestBody PetType petType) {
         String message = petTypeService.update(id, petType);
@@ -66,7 +63,7 @@ public class PetTypeController {
         }
     }
 
-    // Deletes a pet type, or 404 when the id is unknown
+    
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable UUID id) {
         String message = petTypeService.delete(id);

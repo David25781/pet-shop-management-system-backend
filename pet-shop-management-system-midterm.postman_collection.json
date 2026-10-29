@@ -1,0 +1,184 @@
+{
+  "info": {
+    "name": "pet-shop-management-system-midterm",
+    "description": "Pet Shop Management System, mid-term INSY 8322. One request per requirement, named by its ID. Student: David Ndjimbo, ID 25965.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8081" }
+  ],
+  "item": [
+    {
+      "name": "A1",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/groomers/all",
+        "description": "A1 entities and relationships. 200: every groomer shows its groomingBay and its petTypes, and the pet types do not show their groomers (no JSON loop)."
+      }
+    },
+    {
+      "name": "A2",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/pet-owners/652c2aa0-09fd-4016-8eff-3317e65a75f0",
+        "description": "A2 CRUD (get by id). 200 with the pet owner. With an unknown id: 404 The pet owner with that id does not exist. Change the method and path for save, all, update or delete."
+      }
+    },
+    {
+      "name": "B1",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/pet-owners/by-last-name?lastName=ndjimbo",
+        "description": "B1 derived query. 200: pet owners with last name Ndjimbo, letter case ignored, sorted by firstName A to Z. Empty list when nobody matches."
+      }
+    },
+    {
+      "name": "B2",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/grooming-sessions/by-status?status=BOOKED",
+        "description": "B2 derived query. 200: sessions in that status, earliest sessionDate first. Invalid status gives 400."
+      }
+    },
+    {
+      "name": "B3",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/grooming-sessions/between?start=2026-10-01&end=2026-10-31",
+        "description": "B3 derived query. 200: sessions between the two dates, both inclusive, ordered by sessionDate."
+      }
+    },
+    {
+      "name": "C1",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/groomers/by-pet-type?name=dogs",
+        "description": "C1 JPQL join on the petTypes collection with LOWER. 200: groomers that hold Dogs (Alice and Grace)."
+      }
+    },
+    {
+      "name": "C2",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/grooming-bays/free",
+        "description": "C2 JPQL NOT EXISTS. 200: grooming bays that no groomer occupies, sorted by bayNumber (bay 4 with the seed data)."
+      }
+    },
+    {
+      "name": "C3",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/pet-types/unused",
+        "description": "C3 JPQL IS EMPTY. 200: pet types nobody holds (Rabbits with the seed data)."
+      }
+    },
+    {
+      "name": "C4",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/pet-owners/of-groomer/5c4e609d-f4d6-4ee8-ab45-3c71287204de",
+        "description": "C4 JPQL DISTINCT with path navigation. 200: pet owners of Alice, each listed once. Unknown groomer id: 404 The groomer with that id does not exist."
+      }
+    },
+    {
+      "name": "D1",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+        "url": "{{baseUrl}}/api/grooming-sessions/save",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"sessionDate\": \"2027-03-01\", \"status\": \"FINISHED\", \"service\": \"Demo session\", \"petOwner\": {\"id\": \"652c2aa0-09fd-4016-8eff-3317e65a75f0\"}, \"groomer\": {\"id\": \"5c4e609d-f4d6-4ee8-ab45-3c71287204de\"}}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "description": "D1 safe saving. First run: 201 Grooming session saved successfully, saved as BOOKED. Second run: 409 Groomer is already booked on that date. A past sessionDate gives 400 Grooming session date cannot be in the past. Delete the test session afterwards."
+      }
+    },
+    {
+      "name": "D2",
+      "request": {
+        "method": "PATCH",
+        "url": "{{baseUrl}}/api/grooming-sessions/a8811739-1016-4f44-8ae2-9e481f597bb0/status?status=IN_PROGRESS",
+        "description": "D2 status flow. BOOKED to IN_PROGRESS: 200 Grooming session status updated successfully. Then status=BOOKED gives 400 Cannot change status from IN_PROGRESS to BOOKED. Unknown id: 404."
+      }
+    },
+    {
+      "name": "D3",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/api/groomers/3b2f02fb-2135-4d82-b4c3-568837569199/pet-types/aeb50411-a3c3-47bc-ac7e-298503131c5a",
+        "description": "D3 add one pet type to a groomer. First run: 200 Pet type added to the groomer (the old pet types are kept). Second run: 409 The groomer already has that pet type. Unknown ids: 404."
+      }
+    },
+    {
+      "name": "D4",
+      "request": {
+        "method": "PATCH",
+        "url": "{{baseUrl}}/api/groomers/3b2f02fb-2135-4d82-b4c3-568837569199/grooming-bay?bayNumber=4",
+        "description": "D4 move a groomer to another grooming bay. 200 Grooming bay changed successfully (check the old bay with C2). bayNumber=3 gives 409 That grooming bay is taken by another groomer. bayNumber=99 gives 404."
+      }
+    },
+    {
+      "name": "E1",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+        "url": "{{baseUrl}}/api/product-sales/save?groomingSessionId=0ce0e2f8-bbdd-479c-a264-f1d68e6e5d05",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"productName\": \"Flea shampoo\", \"instructions\": \"Use once a week\", \"quantity\": 1}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "description": "E1 write a product sale. 201 Product sale saved successfully (soldDate is today). A grooming session that is not FINISHED gives 400 Product sales are only for FINISHED grooming sessions. Unknown session: 404."
+      }
+    },
+    {
+      "name": "E2",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/product-sales/pet-owner/PO-0210",
+        "description": "E2 JPQL product sale history of a pet owner, newest soldDate first. Empty list when there is none."
+      }
+    },
+    {
+      "name": "E3",
+      "request": {
+        "method": "DELETE",
+        "url": "{{baseUrl}}/api/grooming-sessions/delete/0ce0e2f8-bbdd-479c-a264-f1d68e6e5d05",
+        "description": "E3 delete and protect. This session has product sales: 409 That grooming session has product sales, delete them first. For the product sale delete use DELETE /api/product-sales/delete/{id}: 200 Product sale deleted successfully, unknown id 404."
+      }
+    },
+    {
+      "name": "F1",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/grooming-sessions/stats/by-status",
+        "description": "F1 JPQL GROUP BY and COUNT. 200: one row per status with its count, a status with zero sessions does not appear."
+      }
+    },
+    {
+      "name": "F2",
+      "request": {
+        "method": "PATCH",
+        "url": "{{baseUrl}}/api/grooming-sessions/cancel-day?groomerId=5c4e609d-f4d6-4ee8-ab45-3c71287204de&date=2026-10-20",
+        "description": "F2 JPQL bulk UPDATE. 200 with the real number, for example 1 grooming sessions cancelled. FINISHED sessions are not touched."
+      }
+    },
+    {
+      "name": "Bonus-Dashboard",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/dashboard/summary",
+        "description": "Bonus dashboard. 200: one JSON object with petOwners, groomers, freeBays, sessionsToday, booked and productSales."
+      }
+    },
+    {
+      "name": "Bonus-Page",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/grooming-sessions/page?page=0&size=5&sort=sessionDate,desc",
+        "description": "Bonus pagination. 200: a Page of grooming sessions with totalPages and totalElements."
+      }
+    }
+  ]
+}

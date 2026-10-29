@@ -24,7 +24,7 @@ public class ProductSaleController {
     @Autowired
     private ProductSaleService productSaleService;
 
-    // E1: writes a product sale for a FINISHED grooming session; 404 unknown session, 400 not FINISHED, 201 saved
+    
     @PostMapping("/save")
     public ResponseEntity<String> save(@RequestParam UUID groomingSessionId, @RequestBody ProductSale productSale) {
         String message = productSaleService.save(groomingSessionId, productSale);
@@ -37,19 +37,18 @@ public class ProductSaleController {
         }
     }
 
-    // Returns every product sale
+    
     @GetMapping("/all")
     public ResponseEntity<List<ProductSale>> findAll() {
         return new ResponseEntity<>(productSaleService.findAll(), HttpStatus.OK);
     }
 
-    // E2: product sale history of a pet owner across all grooming sessions, newest sold date first
+    
     @GetMapping("/pet-owner/{ownerCode}")
     public ResponseEntity<List<ProductSale>> findByOwnerCode(@PathVariable String ownerCode) {
         return new ResponseEntity<>(productSaleService.findByOwnerCode(ownerCode), HttpStatus.OK);
     }
 
-    // E3: deletes a product sale, or 404 when the id is unknown
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable UUID id) {
         String message = productSaleService.delete(id);

@@ -33,7 +33,7 @@ public class GroomingSessionController {
     @Autowired
     private GroomingSessionService groomingSessionService;
 
-    // D1: saves a grooming session; 400 for a past date, 409 when the groomer is already booked, 201 otherwise
+    
     @PostMapping("/save")
     public ResponseEntity<String> save(@RequestBody GroomingSession groomingSession) {
         String message = groomingSessionService.save(groomingSession);
@@ -46,19 +46,18 @@ public class GroomingSessionController {
         }
     }
 
-    // Returns every grooming session
+    
     @GetMapping("/all")
     public ResponseEntity<List<GroomingSession>> findAll() {
         return new ResponseEntity<>(groomingSessionService.findAll(), HttpStatus.OK);
     }
 
-    // B2: lists grooming sessions in one status, earliest date first
     @GetMapping("/by-status")
     public ResponseEntity<List<GroomingSession>> findByStatus(@RequestParam SessionStatus status) {
         return new ResponseEntity<>(groomingSessionService.findByStatus(status), HttpStatus.OK);
     }
 
-    // B3: lists grooming sessions between two dates, both inclusive; the Strings are parsed here
+    
     @GetMapping("/between")
     public ResponseEntity<List<GroomingSession>> findBetween(@RequestParam String start, @RequestParam String end) {
         LocalDate startDate = LocalDate.parse(start);
@@ -66,13 +65,13 @@ public class GroomingSessionController {
         return new ResponseEntity<>(groomingSessionService.findBetween(startDate, endDate), HttpStatus.OK);
     }
 
-    // F1: one row per status with its count, statuses without grooming sessions do not appear
+    
     @GetMapping("/stats/by-status")
     public ResponseEntity<List<Object[]>> countByStatus() {
         return new ResponseEntity<>(groomingSessionService.countByStatus(), HttpStatus.OK);
     }
 
-    // Bonus: grooming sessions page by page; the Pageable is built here from page, size and sort
+    
     @GetMapping("/page")
     public ResponseEntity<Page<GroomingSession>> findPage(
             @RequestParam(defaultValue = "0") int page,
@@ -87,7 +86,6 @@ public class GroomingSessionController {
         return new ResponseEntity<>(groomingSessionService.findPage(pageable), HttpStatus.OK);
     }
 
-    // Returns one grooming session, or 404 when the id is unknown
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable UUID id) {
         Optional<GroomingSession> groomingSession = groomingSessionService.findById(id);
@@ -98,7 +96,7 @@ public class GroomingSessionController {
         }
     }
 
-    // Updates the general data of a grooming session (never the status), or 404 when the id is unknown
+   
     @PutMapping("/update/{id}")
     public ResponseEntity<String> update(@PathVariable UUID id, @RequestBody GroomingSession groomingSession) {
         String message = groomingSessionService.update(id, groomingSession);
@@ -109,7 +107,7 @@ public class GroomingSessionController {
         }
     }
 
-    // D2: moves the status along the allowed arrows; 404 unknown id, 400 forbidden move, 200 otherwise
+    
     @PatchMapping("/{id}/status")
     public ResponseEntity<String> updateStatus(@PathVariable UUID id, @RequestParam SessionStatus status) {
         String message = groomingSessionService.updateStatus(id, status);
@@ -122,7 +120,7 @@ public class GroomingSessionController {
         }
     }
 
-    // F2: cancels in one UPDATE every grooming session of a groomer on a date, except the FINISHED ones
+    
     @PatchMapping("/cancel-day")
     public ResponseEntity<String> cancelDay(@RequestParam UUID groomerId, @RequestParam String date) {
         LocalDate day = LocalDate.parse(date);
@@ -130,7 +128,7 @@ public class GroomingSessionController {
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
-    // E3: deletes a grooming session; 404 unknown id, 409 when it still has product sales
+   
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable UUID id) {
         String message = groomingSessionService.delete(id);

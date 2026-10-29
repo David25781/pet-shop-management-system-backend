@@ -25,26 +25,23 @@ public class GroomingBayController {
     @Autowired
     private GroomingBayService groomingBayService;
 
-    // Saves a new grooming bay and answers 201 Created
     @PostMapping("/save")
     public ResponseEntity<String> save(@RequestBody GroomingBay groomingBay) {
         String message = groomingBayService.save(groomingBay);
         return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
 
-    // Returns every grooming bay
     @GetMapping("/all")
     public ResponseEntity<List<GroomingBay>> findAll() {
         return new ResponseEntity<>(groomingBayService.findAll(), HttpStatus.OK);
     }
 
-    // C2: lists the grooming bays that no groomer occupies, sorted by bay number
+   
     @GetMapping("/free")
     public ResponseEntity<List<GroomingBay>> findFree() {
         return new ResponseEntity<>(groomingBayService.findFree(), HttpStatus.OK);
     }
 
-    // Returns one grooming bay, or 404 when the id is unknown
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable UUID id) {
         Optional<GroomingBay> groomingBay = groomingBayService.findById(id);
@@ -55,7 +52,6 @@ public class GroomingBayController {
         }
     }
 
-    // Updates a grooming bay, or 404 when the id is unknown
     @PutMapping("/update/{id}")
     public ResponseEntity<String> update(@PathVariable UUID id, @RequestBody GroomingBay groomingBay) {
         String message = groomingBayService.update(id, groomingBay);
@@ -66,7 +62,6 @@ public class GroomingBayController {
         }
     }
 
-    // Deletes a grooming bay, or 404 when the id is unknown
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable UUID id) {
         String message = groomingBayService.delete(id);

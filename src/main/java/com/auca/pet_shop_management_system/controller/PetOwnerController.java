@@ -26,26 +26,26 @@ public class PetOwnerController {
     @Autowired
     private PetOwnerService petOwnerService;
 
-    // Saves a new pet owner and answers 201 Created
+    
     @PostMapping("/save")
     public ResponseEntity<String> save(@RequestBody PetOwner petOwner) {
         String message = petOwnerService.save(petOwner);
         return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
 
-    // Returns every pet owner
+    
     @GetMapping("/all")
     public ResponseEntity<List<PetOwner>> findAll() {
         return new ResponseEntity<>(petOwnerService.findAll(), HttpStatus.OK);
     }
 
-    // B1: finds pet owners by last name, case-insensitive, sorted by first name
+    
     @GetMapping("/by-last-name")
     public ResponseEntity<List<PetOwner>> findByLastName(@RequestParam String lastName) {
         return new ResponseEntity<>(petOwnerService.findByLastName(lastName), HttpStatus.OK);
     }
 
-    // C4: lists each pet owner of a groomer once, or 404 when the groomer id is unknown
+    
     @GetMapping("/of-groomer/{groomerId}")
     public ResponseEntity<?> findByGroomer(@PathVariable UUID groomerId) {
         Optional<List<PetOwner>> petOwners = petOwnerService.findByGroomer(groomerId);
@@ -56,7 +56,7 @@ public class PetOwnerController {
         }
     }
 
-    // Returns one pet owner, or 404 when the id is unknown
+    
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable UUID id) {
         Optional<PetOwner> petOwner = petOwnerService.findById(id);
@@ -67,7 +67,7 @@ public class PetOwnerController {
         }
     }
 
-    // Updates a pet owner, or 404 when the id is unknown
+    
     @PutMapping("/update/{id}")
     public ResponseEntity<String> update(@PathVariable UUID id, @RequestBody PetOwner petOwner) {
         String message = petOwnerService.update(id, petOwner);
@@ -78,7 +78,7 @@ public class PetOwnerController {
         }
     }
 
-    // Deletes a pet owner, or 404 when the id is unknown
+    
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable UUID id) {
         String message = petOwnerService.delete(id);
